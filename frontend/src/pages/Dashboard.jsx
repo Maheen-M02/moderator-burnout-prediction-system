@@ -1,8 +1,23 @@
 import { motion } from 'framer-motion'
 import { LineChart, Line, BarChart, Bar, ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts'
-import { AlertTriangle, Heart, Activity, TrendingUp, TrendingDown, RefreshCw, Download, MoreVertical, Users, Shield } from 'lucide-react'
+import { AlertTriangle, Heart, Activity, TrendingUp, TrendingDown, RefreshCw, Download, MoreVertical, Users, Shield, Loader2 } from 'lucide-react'
+import { useState } from 'react'
+import { generateAnalyticsPDF } from '../utils/generatePDF'
 
 const Dashboard = ({ data }) => {
+  const [downloading, setDownloading] = useState(false)
+
+  const handleDownload = async () => {
+    if (downloading) return
+    setDownloading(true)
+    try {
+      await new Promise(resolve => setTimeout(resolve, 50)) // allow spinner to render
+      generateAnalyticsPDF(data)
+    } finally {
+      setDownloading(false)
+    }
+  }
+
   const kpiData = data?.kpis || {
     burnout_risk: 'No Data',
     avg_sentiment: 0,
@@ -28,8 +43,15 @@ const Dashboard = ({ data }) => {
           <button className="p-2 bg-[#FF4D00] text-white rounded-lg hover:bg-[#ff6b35] transition-colors">
             <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
-          <button className="p-2 bg-[#FF4D00] text-white rounded-lg hover:bg-[#ff6b35] transition-colors">
-            <Download className="w-4 h-4 sm:w-5 sm:h-5" />
+          <button
+            onClick={handleDownload}
+            disabled={downloading}
+            title="Download PDF Report"
+            className="p-2 bg-[#FF4D00] text-white rounded-lg hover:bg-[#ff6b35] transition-colors disabled:opacity-60 flex items-center gap-1"
+          >
+            {downloading
+              ? <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
+              : <Download className="w-4 h-4 sm:w-5 sm:h-5" />}
           </button>
           <button className="p-2 bg-black border border-[#FF4D00]/20 text-[#FF4D00] rounded-lg hover:bg-[#FF4D00]/10 transition-colors">
             <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5" />
