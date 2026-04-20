@@ -32,23 +32,23 @@ const Landing = ({ onGetStarted }) => {
       </div>
 
       {/* Right Pane - Content Side */}
-      <main className="w-full md:w-1/2 h-full flex flex-col p-8 md:p-20 justify-between bg-[#0A0A0B]">
+      <main className="w-full md:w-1/2 h-full flex flex-col p-6 sm:p-8 md:p-20 justify-between bg-[#0A0A0B]">
         {/* Header */}
-        <header className="flex justify-between items-center mb-12">
+        <header className="flex justify-between items-center mb-8 md:mb-12">
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center gap-2"
           >
-            <div className="w-8 h-8 border border-white/20 flex items-center justify-center">
-              <div className="w-3 h-3 bg-[#FF4D00]" />
+            <div className="w-6 h-6 sm:w-8 sm:h-8 border border-white/20 flex items-center justify-center">
+              <div className="w-2 h-2 sm:w-3 sm:h-3 bg-[#FF4D00]" />
             </div>
-            <span className="font-bold text-lg tracking-[0.2em] text-white">BURNOUT</span>
+            <span className="font-bold text-base sm:text-lg tracking-[0.2em] text-white">BURNOUT</span>
           </motion.div>
           
-          <nav className="hidden sm:flex gap-8">
+          <nav className="hidden sm:flex gap-4 md:gap-8">
             {['Protocol', 'Systems', 'Access'].map((item) => (
-              <a key={item} href="#" className="text-[10px] uppercase tracking-[0.3em] text-white/40 hover:text-white transition-colors">
+              <a key={item} href="#" className="text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-white/40 hover:text-white transition-colors">
                 {item}
               </a>
             ))}
@@ -61,12 +61,12 @@ const Landing = ({ onGetStarted }) => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="mb-8"
+            className="mb-6 md:mb-8"
           >
-            <span className="inline-block text-[#FF4D00] text-[12px] font-semibold uppercase tracking-[0.3em] mb-8">
+            <span className="inline-block text-[#FF4D00] text-[10px] sm:text-[12px] font-semibold uppercase tracking-[0.3em] mb-4 md:mb-8">
               Cognitive Load Monitoring
             </span>
-            <h1 className="text-6xl md:text-8xl font-bold leading-[0.95] tracking-[-0.03em] text-white mb-8">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold leading-[0.95] tracking-[-0.03em] text-white mb-6 md:mb-8">
               Burnout<br />
               Analytic<br />
               Dashboard
@@ -77,7 +77,7 @@ const Landing = ({ onGetStarted }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="max-w-md text-white/50 text-lg md:text-xl font-light leading-relaxed mb-12"
+            className="max-w-md text-white/50 text-base sm:text-lg md:text-xl font-light leading-relaxed mb-8 md:mb-12"
           >
             Quantifying the invisible. Monitor team exhaustion through predictive behavioral modeling and biometric synthesis.
           </motion.p>
@@ -86,36 +86,36 @@ const Landing = ({ onGetStarted }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-6 mb-16"
+            className="flex flex-col sm:flex-row gap-4 md:gap-6 mb-12 md:mb-16"
           >
             <button 
               onClick={onGetStarted}
-              className="px-10 py-5 bg-white text-black font-bold text-sm uppercase tracking-[0.15em] hover:bg-white/90 transition-all flex items-center justify-center gap-3"
+              className="px-8 sm:px-10 py-4 sm:py-5 bg-white text-black font-bold text-xs sm:text-sm uppercase tracking-[0.15em] hover:bg-white/90 transition-all flex items-center justify-center gap-3"
             >
               Initialize Deployment
               <ArrowRight className="w-4 h-4" />
             </button>
-            <button className="px-10 py-5 border border-white/10 text-white font-bold text-sm uppercase tracking-[0.15em] hover:bg-white hover:text-black transition-all">
+            <button className="px-8 sm:px-10 py-4 sm:py-5 border border-white/10 text-white font-bold text-xs sm:text-sm uppercase tracking-[0.15em] hover:bg-white hover:text-black transition-all">
               Systems Check
             </button>
           </motion.div>
 
           {/* Stat Grid */}
-          <div className="grid grid-cols-2 gap-12 border-t border-white/10 pt-12">
+          <div className="grid grid-cols-2 gap-8 md:gap-12 border-t border-white/10 pt-8 md:pt-12">
             <div className="flex flex-col gap-2">
-              <span className="text-2xl font-semibold tracking-tight text-white">94.2%</span>
-              <span className="text-[10px] uppercase tracking-widest text-white/40">Precision Rate</span>
+              <span className="text-xl sm:text-2xl font-semibold tracking-tight text-white">94.2%</span>
+              <span className="text-[9px] sm:text-[10px] uppercase tracking-widest text-white/40">Precision Rate</span>
             </div>
             <div className="flex flex-col gap-2">
-              <span className="text-2xl font-semibold tracking-tight text-white">2.4ms</span>
-              <span className="text-[10px] uppercase tracking-widest text-white/40">Latency Index</span>
+              <span className="text-xl sm:text-2xl font-semibold tracking-tight text-white">2.4ms</span>
+              <span className="text-[9px] sm:text-[10px] uppercase tracking-widest text-white/40">Latency Index</span>
             </div>
           </div>
         </div>
 
         {/* Footer Features */}
-        <footer className="mt-20 pt-10 border-t border-white/5 opacity-40">
-          <div className="flex flex-wrap gap-8">
+        <footer className="mt-12 md:mt-20 pt-8 md:pt-10 border-t border-white/5 opacity-40">
+          <div className="flex flex-wrap gap-6 md:gap-8">
             <Feature icon={<BarChart3 className="w-3 h-3" />} title="Metrics" />
             <Feature icon={<Clock className="w-3 h-3" />} title="Real-time" />
             <Feature icon={<ShieldCheck className="w-3 h-3" />} title="Privacy" />

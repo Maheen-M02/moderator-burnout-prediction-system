@@ -11,26 +11,26 @@ const Analytics = ({ data }) => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between"
+        className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
       >
         <div>
-          <h1 className="text-3xl font-light text-white mb-1" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+          <h1 className="text-2xl sm:text-3xl font-light text-white mb-1" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
             Moderator Analytics Dashboard
           </h1>
-          <p className="text-sm text-white/40">Real-time insights and performance metrics</p>
+          <p className="text-xs sm:text-sm text-white/40">Real-time insights and performance metrics</p>
         </div>
         <div className="flex gap-2">
-          <button className="px-4 py-2 bg-[#FF4D00] text-white text-sm rounded-lg hover:bg-[#ff6b35] transition-colors">
+          <button className="px-3 sm:px-4 py-2 bg-[#FF4D00] text-white text-xs sm:text-sm rounded-lg hover:bg-[#ff6b35] transition-colors">
             Refresh
           </button>
-          <button className="px-4 py-2 bg-white/5 border border-white/10 text-white text-sm rounded-lg hover:bg-white/10 transition-colors">
+          <button className="px-3 sm:px-4 py-2 bg-white/5 border border-white/10 text-white text-xs sm:text-sm rounded-lg hover:bg-white/10 transition-colors">
             Export
           </button>
         </div>
       </motion.div>
 
       {/* Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

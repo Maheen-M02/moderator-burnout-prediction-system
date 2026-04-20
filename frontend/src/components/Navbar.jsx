@@ -1,10 +1,19 @@
-import { Bell, Settings, User, Search } from 'lucide-react'
+import { Bell, Settings, Search, Menu } from 'lucide-react'
 
-const Navbar = () => {
+const Navbar = ({ onMenuClick, mobileMenuOpen }) => {
   return (
-    <nav className="bg-[#0A0A0B] text-white px-6 py-3 flex items-center justify-between shadow-lg border-b border-[#FF4D00]/10" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
-      <div className="flex items-center gap-4 flex-1">
-        <div className="relative flex-1 max-w-md">
+    <nav className="bg-[#0A0A0B] text-white px-4 md:px-6 py-3 flex items-center justify-between shadow-lg border-b border-[#FF4D00]/10" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+      {/* Mobile Menu Button */}
+      <button 
+        onClick={onMenuClick}
+        className="lg:hidden p-2 hover:bg-[#FF4D00]/10 rounded-lg transition-colors"
+      >
+        <Menu className="w-5 h-5 text-gray-400" />
+      </button>
+
+      {/* Search Bar */}
+      <div className="flex items-center gap-4 flex-1 max-w-md mx-4">
+        <div className="relative flex-1 hidden sm:block">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
           <input
             type="text"
@@ -14,18 +23,19 @@ const Navbar = () => {
         </div>
       </div>
 
+      {/* Right Side Actions */}
       <div className="flex items-center gap-2">
         <button className="p-2 rounded-lg hover:bg-[#FF4D00]/10 transition-colors relative">
           <Bell className="w-5 h-5 text-gray-400" />
           <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#FF4D00] rounded-full"></span>
         </button>
         
-        <button className="p-2 rounded-lg hover:bg-[#FF4D00]/10 transition-colors">
+        <button className="hidden sm:block p-2 rounded-lg hover:bg-[#FF4D00]/10 transition-colors">
           <Settings className="w-5 h-5 text-gray-400" />
         </button>
         
         <div className="ml-2 flex items-center gap-3 pl-3 border-l border-[#FF4D00]/10">
-          <div className="text-right">
+          <div className="text-right hidden md:block">
             <p className="text-sm font-medium text-gray-200">Admin User</p>
             <p className="text-xs text-gray-500">admin@modguard.com</p>
           </div>

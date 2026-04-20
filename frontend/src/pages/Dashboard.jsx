@@ -16,23 +16,23 @@ const Dashboard = ({ data }) => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between"
+        className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
       >
         <div>
-          <h1 className="text-4xl font-semibold text-[#FF4D00] mb-2 tracking-tight" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-[#FF4D00] mb-2 tracking-tight" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
             Moderator Dashboard
           </h1>
-          <p className="text-base text-black font-medium">Real-time burnout detection and wellness monitoring</p>
+          <p className="text-sm sm:text-base text-black font-medium">Real-time burnout detection and wellness monitoring</p>
         </div>
         <div className="flex gap-2">
           <button className="p-2 bg-[#FF4D00] text-white rounded-lg hover:bg-[#ff6b35] transition-colors">
-            <RefreshCw className="w-5 h-5" />
+            <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
           <button className="p-2 bg-[#FF4D00] text-white rounded-lg hover:bg-[#ff6b35] transition-colors">
-            <Download className="w-5 h-5" />
+            <Download className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
           <button className="p-2 bg-black border border-[#FF4D00]/20 text-[#FF4D00] rounded-lg hover:bg-[#FF4D00]/10 transition-colors">
-            <MoreVertical className="w-5 h-5" />
+            <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
       </motion.div>
@@ -42,30 +42,30 @@ const Dashboard = ({ data }) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-black border border-[#FF4D00]/20 rounded-2xl p-6 shadow-lg"
+        className="bg-black border border-[#FF4D00]/20 rounded-2xl p-4 sm:p-6 shadow-lg"
       >
         <h3 className="text-sm font-medium text-white/60 mb-4">Overview</h3>
-        <div className="grid grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8">
           <div>
-            <div className="text-3xl font-light mb-1 text-[#FF4D00]">
+            <div className="text-2xl sm:text-3xl font-light mb-1 text-[#FF4D00]">
               {data?.charts?.clusters?.length || 0}
-              <span className="text-sm text-white/60 ml-2">+8.2%</span>
+              <span className="text-xs sm:text-sm text-white/60 ml-2">+8.2%</span>
             </div>
-            <div className="text-sm text-white/40">Total Moderators</div>
+            <div className="text-xs sm:text-sm text-white/40">Total Moderators</div>
           </div>
           <div>
-            <div className="text-3xl font-light mb-1 text-[#FF4D00]">
+            <div className="text-2xl sm:text-3xl font-light mb-1 text-[#FF4D00]">
               {typeof kpiData.avg_sentiment === 'number' ? (kpiData.avg_sentiment * 100).toFixed(0) + '%' : '0%'}
-              <span className="text-sm text-white/60 ml-2">+12.1%</span>
+              <span className="text-xs sm:text-sm text-white/60 ml-2">+12.1%</span>
             </div>
-            <div className="text-sm text-white/40">Avg Sentiment</div>
+            <div className="text-xs sm:text-sm text-white/40">Avg Sentiment</div>
           </div>
           <div>
-            <div className="text-3xl font-light mb-1 text-[#FF4D00]">
+            <div className="text-2xl sm:text-3xl font-light mb-1 text-[#FF4D00]">
               {typeof kpiData.toxicity_level === 'number' ? (kpiData.toxicity_level * 100).toFixed(0) + '%' : '0%'}
-              <span className="text-sm text-white/60 ml-2">-3.2%</span>
+              <span className="text-xs sm:text-sm text-white/60 ml-2">-3.2%</span>
             </div>
-            <div className="text-sm text-white/40">Toxicity Rate</div>
+            <div className="text-xs sm:text-sm text-white/40">Toxicity Rate</div>
           </div>
         </div>
       </motion.div>
@@ -299,7 +299,7 @@ const Dashboard = ({ data }) => {
             View All
           </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {data?.recommendations ? (
             data.recommendations.slice(0, 3).map((rec, index) => (
               <div key={index} className="bg-[#FF4D00]/5 border border-[#FF4D00]/20 rounded-xl p-4">
@@ -314,7 +314,7 @@ const Dashboard = ({ data }) => {
               </div>
             ))
           ) : (
-            <div className="col-span-3 text-center py-8 text-white/40">
+            <div className="col-span-full text-center py-8 text-white/40">
               <Shield className="w-12 h-12 mx-auto mb-2 opacity-50" />
               <p className="text-sm">Upload data to receive AI-powered recommendations</p>
             </div>

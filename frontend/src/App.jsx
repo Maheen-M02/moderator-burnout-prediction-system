@@ -11,9 +11,15 @@ function App() {
   const [showLanding, setShowLanding] = useState(true)
   const [currentPage, setCurrentPage] = useState('dashboard')
   const [analysisData, setAnalysisData] = useState(null)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const handleGetStarted = () => {
     setShowLanding(false)
+  }
+
+  const handleNavigate = (page) => {
+    setCurrentPage(page)
+    setMobileMenuOpen(false) // Close mobile menu on navigation
   }
 
   const renderPage = () => {
@@ -21,7 +27,7 @@ function App() {
       case 'dashboard':
         return <Dashboard data={analysisData} />
       case 'upload':
-        return <Upload onAnalysisComplete={setAnalysisData} onNavigate={setCurrentPage} />
+        return <Upload onAnalysisComplete={setAnalysisData} onNavigate={handleNavigate} />
       case 'analytics':
         return <Analytics data={analysisData} />
       case 'live':
@@ -37,10 +43,18 @@ function App() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">
-      <Sidebar currentPage={currentPage} onNavigate={setCurrentPage} />
+      <Sidebar 
+        currentPage={currentPage} 
+        onNavigate={handleNavigate}
+        mobileMenuOpen={mobileMenuOpen}
+        setMobileMenuOpen={setMobileMenuOpen}
+      />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Navbar />
-        <main className="flex-1 overflow-y-auto p-6 bg-gray-50">
+        <Navbar 
+          onMenuClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          mobileMenuOpen={mobileMenuOpen}
+        />
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50">
           {renderPage()}
         </main>
       </div>
