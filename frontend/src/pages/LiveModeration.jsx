@@ -6,10 +6,20 @@ import axios from 'axios'
 // Get API URL from environment variable
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
+// Create axios instance with longer timeout for mobile
+const axiosInstance = axios.create({
+  timeout: 30000, // 30 seconds timeout
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+  }
+})
+
 const LiveModeration = () => {
   const [inputText, setInputText] = useState('')
   const [analyzing, setAnalyzing] = useState(false)
   const [result, setResult] = useState(null)
+  const [error, setError] = useState(null)
 
   const getActionColor = (action) => {
     switch (action) {
@@ -35,14 +45,28 @@ const LiveModeration = () => {
     if (!inputText.trim()) return
 
     setAnalyzing(true)
+    setError(null)
+    setResult(null)
+    
     try {
-      const response = await axios.post(`${API_URL}/api/moderate/text`, {
+      const response = await axiosInstance.post(`${API_URL}/api/moderate/text`, {
         text: inputText
       })
       setResult(response.data)
-    } catch (error) {
-      console.error('Analysis failed:', error)
-      alert('Failed to analyze content. Please try again.')
+    } catch (err) {
+      console.error('Analysis failed:', err)
+      
+      let errorMessage = 'Failed to analyze content. Please try again.'
+      
+      if (err.code === 'ECONNABORTED' || err.message.includes('timeout')) {
+        errorMessage = 'Request timed out. Please check your internet connection and try again.'
+      } else if (err.code === 'ERR_NETWORK') {
+        errorMessage = 'Network error. Please check your internet connection.'
+      } else if (err.response) {
+        errorMessage = err.response.data?.detail || err.response.statusText || errorMessage
+      }
+      
+      setError(errorMessage)
     } finally {
       setAnalyzing(false)
     }
@@ -97,6 +121,23 @@ const LiveModeration = () => {
           </motion.button>
         </div>
       </motion.div>
+
+      {/* Error Message */}
+      {error && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-red-50 border border-red-200 rounded-2xl p-4 sm:p-6"
+        >
+          <div className="flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-medium text-red-900 mb-1">Analysis Failed</p>
+              <p className="text-xs sm:text-sm text-red-700">{error}</p>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       {/* Results */}
       <AnimatePresence>

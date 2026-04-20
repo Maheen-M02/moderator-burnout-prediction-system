@@ -6,12 +6,21 @@ import axios from 'axios'
 // Get API URL from environment variable
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
+// Create axios instance with longer timeout for mobile
+const axiosInstance = axios.create({
+  timeout: 60000, // 60 seconds timeout for mobile networks
+  headers: {
+    'Accept': 'application/json',
+  }
+})
+
 const Upload = ({ onAnalysisComplete, onNavigate }) => {
   const [file, setFile] = useState(null)
   const [isDragging, setIsDragging] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState('')
   const fileInputRef = useRef(null)
 
   const handleDragOver = (e) => {
@@ -50,27 +59,69 @@ const Upload = ({ onAnalysisComplete, onNavigate }) => {
 
     setUploading(true)
     setError(null)
+    setUploadProgress('Uploading file...')
 
     const formData = new FormData()
     formData.append('file', file)
 
     try {
-      await axios.post(`${API_URL}/api/upload`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+      // Upload with progress tracking
+      setUploadProgress('Uploading file...')
+      await axiosInstance.post(`${API_URL}/api/upload`, formData, {
+        headers: { 
+          'Content-Type': 'multipart/form-data',
+        },
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+          setUploadProgress(`Uploading... ${percentCompleted}%`)
+        }
       })
 
-      const analysisResponse = await axios.post(`${API_URL}/api/analyze`)
-      onAnalysisComplete(analysisResponse.data)
+      // Analyze with retry logic
+      setUploadProgress('Analyzing data...')
+      let retries = 3
+      let analysisResponse = null
       
-      setSuccess(true)
-      
-      setTimeout(() => {
-        onNavigate('dashboard')
-      }, 1500)
+      while (retries > 0) {
+        try {
+          analysisResponse = await axiosInstance.post(`${API_URL}/api/analyze`, {}, {
+            timeout: 90000 // 90 seconds for analysis
+          })
+          break // Success, exit retry loop
+        } catch (err) {
+          retries--
+          if (retries === 0) throw err
+          setUploadProgress(`Retrying analysis... (${3 - retries}/3)`)
+          await new Promise(resolve => setTimeout(resolve, 2000)) // Wait 2s before retry
+        }
+      }
+
+      if (analysisResponse) {
+        onAnalysisComplete(analysisResponse.data)
+        setSuccess(true)
+        setUploadProgress('Complete!')
+        
+        setTimeout(() => {
+          onNavigate('dashboard')
+        }, 1500)
+      }
     } catch (err) {
       console.error('Upload/Analysis error:', err)
-      const errorMessage = err.response?.data?.detail || err.message || 'Upload failed. Please try again.'
+      
+      let errorMessage = 'Upload failed. Please try again.'
+      
+      if (err.code === 'ECONNABORTED' || err.message.includes('timeout')) {
+        errorMessage = 'Request timed out. Please check your internet connection and try again.'
+      } else if (err.code === 'ERR_NETWORK') {
+        errorMessage = 'Network error. Please check your internet connection.'
+      } else if (err.response) {
+        errorMessage = err.response.data?.detail || err.response.statusText || errorMessage
+      } else if (err.message) {
+        errorMessage = err.message
+      }
+      
       setError(errorMessage)
+      setUploadProgress('')
     } finally {
       setUploading(false)
     }
@@ -173,10 +224,13 @@ const Upload = ({ onAnalysisComplete, onNavigate }) => {
             className="w-full mt-6 py-4 rounded-xl bg-gray-900 text-white font-medium flex items-center justify-center gap-3 hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {uploading ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                Analyzing Data...
-              </>
+              <div className="flex flex-col items-center gap-2">
+                <div className="flex items-center gap-3">
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <span>{uploadProgress || 'Processing...'}</span>
+                </div>
+                <span className="text-xs text-gray-400">This may take a moment on mobile networks</span>
+              </div>
             ) : (
               <>
                 <CheckCircle2 className="w-5 h-5" />
