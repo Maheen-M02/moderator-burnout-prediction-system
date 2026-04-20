@@ -3,6 +3,9 @@ import { motion } from 'framer-motion'
 import { Upload as UploadIcon, FileText, CheckCircle2, AlertCircle, Loader2, FileSpreadsheet } from 'lucide-react'
 import axios from 'axios'
 
+// Get API URL from environment variable
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+
 const Upload = ({ onAnalysisComplete, onNavigate }) => {
   const [file, setFile] = useState(null)
   const [isDragging, setIsDragging] = useState(false)
@@ -52,11 +55,11 @@ const Upload = ({ onAnalysisComplete, onNavigate }) => {
     formData.append('file', file)
 
     try {
-      await axios.post('/api/upload', formData, {
+      await axios.post(`${API_URL}/api/upload`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
 
-      const analysisResponse = await axios.post('/api/analyze')
+      const analysisResponse = await axios.post(`${API_URL}/api/analyze`)
       onAnalysisComplete(analysisResponse.data)
       
       setSuccess(true)

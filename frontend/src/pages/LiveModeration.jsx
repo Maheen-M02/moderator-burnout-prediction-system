@@ -3,6 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Send, AlertTriangle, CheckCircle2, Flag, XCircle, Loader2, Shield } from 'lucide-react'
 import axios from 'axios'
 
+// Get API URL from environment variable
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+
 const LiveModeration = () => {
   const [inputText, setInputText] = useState('')
   const [analyzing, setAnalyzing] = useState(false)
@@ -33,7 +36,7 @@ const LiveModeration = () => {
 
     setAnalyzing(true)
     try {
-      const response = await axios.post('/api/moderate/text', {
+      const response = await axios.post(`${API_URL}/api/moderate/text`, {
         text: inputText
       })
       setResult(response.data)
