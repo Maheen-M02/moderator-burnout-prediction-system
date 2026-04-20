@@ -1,7 +1,26 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, BarChart3, Clock, Layout, ShieldCheck } from 'lucide-react'
+import { useEffect, useRef } from 'react'
 
 const Landing = ({ onGetStarted }) => {
+  const videoRef = useRef(null)
+
+  useEffect(() => {
+    // Attempt to play video on mount for mobile devices
+    if (videoRef.current) {
+      const playPromise = videoRef.current.play()
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          console.log('Autoplay was prevented:', error)
+          // Try to play again after a short delay
+          setTimeout(() => {
+            videoRef.current?.play().catch(() => {})
+          }, 100)
+        })
+      }
+    }
+  }, [])
+
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-[#0A0A0B] overflow-hidden selection:bg-[#FF4D00]/30 selection:text-white">
       {/* Left Pane - Full Bleed Video Presentation */}
@@ -19,15 +38,28 @@ const Landing = ({ onGetStarted }) => {
           className="relative z-30 w-full h-full flex items-center justify-center"
         >
           <video 
+            ref={videoRef}
             autoPlay 
             loop 
             muted 
             playsInline
+            preload="auto"
+            webkit-playsinline="true"
+            x5-playsinline="true"
             className="relative z-40 w-full h-full object-cover mix-blend-screen pointer-events-none opacity-90"
+            onLoadedMetadata={(e) => {
+              // Force play on mobile devices
+              e.target.play().catch(err => {
+                console.log('Autoplay prevented:', err);
+              });
+            }}
           >
             <source src="https://s4.ezgif.com/tmp/ezgif-4de4eb0b4b790a56.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
+          
+          {/* Fallback gradient animation if video doesn't play */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#FF4D00]/20 via-transparent to-[#FF4D00]/10 animate-pulse pointer-events-none" />
         </motion.div>
       </div>
 
