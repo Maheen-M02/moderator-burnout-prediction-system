@@ -118,16 +118,32 @@ const Analytics = ({ data }) => {
             <ResponsiveContainer width="100%" height={300}>
               <ScatterChart>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,77,0,0.1)" />
-                <XAxis dataKey="x" name="Workload" stroke="rgba(255,77,0,0.6)" style={{ fontSize: '12px' }} />
-                <YAxis dataKey="y" name="Sentiment" stroke="rgba(255,77,0,0.6)" style={{ fontSize: '12px' }} />
+                <XAxis
+                  dataKey="x"
+                  name="Workload"
+                  stroke="rgba(255,77,0,0.6)"
+                  style={{ fontSize: '12px' }}
+                  label={{ value: 'Workload', position: 'insideBottom', offset: -5, fill: 'rgba(255,77,0,0.8)', fontSize: 12 }}
+                />
+                <YAxis
+                  dataKey="y"
+                  name="Sentiment"
+                  stroke="rgba(255,77,0,0.6)"
+                  style={{ fontSize: '12px' }}
+                  label={{ value: 'Sentiment', angle: -90, position: 'insideLeft', offset: 10, fill: 'rgba(255,77,0,0.8)', fontSize: 12 }}
+                />
                 <Tooltip
                   contentStyle={{ 
-                    backgroundColor: '#000', 
-                    border: '1px solid rgba(255,77,0,0.3)', 
+                    backgroundColor: '#111', 
+                    border: '1px solid rgba(255,77,0,0.5)', 
                     borderRadius: '8px',
                     fontSize: '12px',
-                    color: '#FF4D00'
+                    color: '#FF4D00',
+                    padding: '8px 12px'
                   }}
+                  labelStyle={{ color: '#FF4D00', fontWeight: 600, marginBottom: '4px' }}
+                  itemStyle={{ color: '#ffffff' }}
+                  wrapperStyle={{ zIndex: 1000 }}
                   cursor={{ strokeDasharray: '3 3' }}
                 />
                 <Scatter data={data.charts.clusters}>

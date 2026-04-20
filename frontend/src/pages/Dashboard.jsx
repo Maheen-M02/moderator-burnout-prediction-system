@@ -122,8 +122,17 @@ const Dashboard = ({ data }) => {
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,77,0,0.1)" />
-                  <XAxis dataKey="time" stroke="rgba(255,77,0,0.6)" style={{ fontSize: '12px' }} />
-                  <YAxis stroke="rgba(255,77,0,0.6)" style={{ fontSize: '12px' }} />
+                  <XAxis
+                    dataKey="time"
+                    stroke="rgba(255,77,0,0.6)"
+                    style={{ fontSize: '12px' }}
+                    label={{ value: 'Time', position: 'insideBottom', offset: -5, fill: 'rgba(255,77,0,0.8)', fontSize: 12 }}
+                  />
+                  <YAxis
+                    stroke="rgba(255,77,0,0.6)"
+                    style={{ fontSize: '12px' }}
+                    label={{ value: 'Activity', angle: -90, position: 'insideLeft', offset: 10, fill: 'rgba(255,77,0,0.8)', fontSize: 12 }}
+                  />
                   <Tooltip
                     contentStyle={{ 
                       backgroundColor: '#000', 
@@ -273,8 +282,17 @@ const Dashboard = ({ data }) => {
               <ResponsiveContainer width="100%" height={200}>
                 <LineChart data={data.charts.sentiment_time}>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,77,0,0.1)" />
-                  <XAxis dataKey="time" stroke="rgba(255,77,0,0.6)" style={{ fontSize: '11px' }} />
-                  <YAxis stroke="rgba(255,77,0,0.6)" style={{ fontSize: '11px' }} />
+                  <XAxis
+                    dataKey="time"
+                    stroke="rgba(255,77,0,0.6)"
+                    style={{ fontSize: '11px' }}
+                    label={{ value: 'Time', position: 'insideBottom', offset: -5, fill: 'rgba(255,77,0,0.8)', fontSize: 11 }}
+                  />
+                  <YAxis
+                    stroke="rgba(255,77,0,0.6)"
+                    style={{ fontSize: '11px' }}
+                    label={{ value: 'Sentiment Score', angle: -90, position: 'insideLeft', offset: 10, fill: 'rgba(255,77,0,0.8)', fontSize: 11 }}
+                  />
                   <Tooltip
                     contentStyle={{ 
                       backgroundColor: '#000', 
