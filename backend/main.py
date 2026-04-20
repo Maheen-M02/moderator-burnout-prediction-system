@@ -36,6 +36,7 @@ def read_root():
     return {"message": "Moderator Burnout Detection API", "status": "active"}
 
 @app.get("/health")
+@app.get("/api/health")
 def health_check():
     """Health check endpoint for mobile connectivity testing"""
     return {"status": "healthy", "service": "moderator-burnout-api"}

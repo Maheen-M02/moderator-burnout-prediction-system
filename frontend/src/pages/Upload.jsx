@@ -3,12 +3,15 @@ import { motion } from 'framer-motion'
 import { Upload as UploadIcon, FileText, CheckCircle2, AlertCircle, Loader2, FileSpreadsheet } from 'lucide-react'
 import axios from 'axios'
 
-// Get API URL from environment variable
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+// Use relative /api path in production (Vercel proxy handles routing to Render)
+// In local dev, VITE_API_URL is set to http://localhost:8000
+const API_BASE = import.meta.env.VITE_API_URL 
+  ? import.meta.env.VITE_API_URL  // local dev: full URL
+  : ''                              // production: use Vercel proxy (relative path)
 
 // Create axios instance with longer timeout for mobile
 const axiosInstance = axios.create({
-  timeout: 60000, // 60 seconds timeout for mobile networks
+  timeout: 90000, // 90 seconds — accounts for Render cold start
   headers: {
     'Accept': 'application/json',
   }
@@ -59,7 +62,14 @@ const Upload = ({ onAnalysisComplete, onNavigate }) => {
 
     setUploading(true)
     setError(null)
-    setUploadProgress('Uploading file...')
+    setUploadProgress('Connecting to server...')
+
+    // Wake up Render backend (free tier sleeps after inactivity)
+    try {
+      await axiosInstance.get(`${API_BASE}/api/health`, { timeout: 60000 })
+    } catch (_) {
+      // Ignore — backend may not have /api/health, continue anyway
+    }
 
     const formData = new FormData()
     formData.append('file', file)
@@ -67,7 +77,7 @@ const Upload = ({ onAnalysisComplete, onNavigate }) => {
     try {
       // Upload with progress tracking
       setUploadProgress('Uploading file...')
-      await axiosInstance.post(`${API_URL}/api/upload`, formData, {
+      await axiosInstance.post(`${API_BASE}/api/upload`, formData, {
         headers: { 
           'Content-Type': 'multipart/form-data',
         },
@@ -84,8 +94,8 @@ const Upload = ({ onAnalysisComplete, onNavigate }) => {
       
       while (retries > 0) {
         try {
-          analysisResponse = await axiosInstance.post(`${API_URL}/api/analyze`, {}, {
-            timeout: 90000 // 90 seconds for analysis
+          analysisResponse = await axiosInstance.post(`${API_BASE}/api/analyze`, {}, {
+            timeout: 120000 // 2 min for analysis on cold start
           })
           break // Success, exit retry loop
         } catch (err) {

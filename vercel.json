@@ -6,6 +6,14 @@
     {
       "source": "/api/:path*",
       "destination": "https://moderator-burnout-api.onrender.com/api/:path*"
+    },
+    {
+      "source": "/health",
+      "destination": "https://moderator-burnout-api.onrender.com/health"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
