@@ -4,7 +4,9 @@ import { Send, AlertTriangle, CheckCircle2, Flag, XCircle, Loader2, Shield } fro
 import axios from 'axios'
 
 // Get API URL from environment variable
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+// In production (Vercel), VITE_API_URL is empty string → relative URL → Vercel proxy handles /api/*
+// In local dev, VITE_API_URL is http://localhost:8000
+const API_URL = import.meta.env.VITE_API_URL !== undefined ? import.meta.env.VITE_API_URL : 'http://localhost:8000'
 
 // Create axios instance with longer timeout for mobile
 const axiosInstance = axios.create({
@@ -130,7 +132,7 @@ const LiveModeration = () => {
           className="bg-red-50 border border-red-200 rounded-2xl p-4 sm:p-6"
         >
           <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+            <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-sm font-medium text-red-900 mb-1">Analysis Failed</p>
               <p className="text-xs sm:text-sm text-red-700">{error}</p>
